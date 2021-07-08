@@ -1,0 +1,56 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}Django Crud{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap-5.0.2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/datatables.min.css' %}">
+
+</head>
+<body>
+<div class="container">
+{% block content %}
+
+{% endblock %}
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="{% static 'vendor/vue-3.1.2.js' %}"></script>
+<script src="{% static 'vendor/bootstrap-5.0.2.min.js' %}"></script>
+<script src="{% static 'vendor/datatables.min.js' %}"></script>
+
+<script>
+    <!-- csrf token -->
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
+<script>
+    <!-- datatables -->
+    jQuery(function ($) {
+        $('.datatable').DataTable({
+            "scrollY": "300px",
+            "scrollX": true,
+            "scrollCollapse": false,
+            stateSave: true,
+
+            dom: 'Blfrtip',
+            buttons: [
+            ],
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            fixedColumns: {
+                leftColumns: 3,
+                //     rightColumns: 1
+            },
+        }).columns.adjust();
+    });
+</script>
+
+</html>
