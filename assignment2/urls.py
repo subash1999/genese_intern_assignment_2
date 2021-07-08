@@ -16,10 +16,24 @@ Including another URLconf
 from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
+from django.shortcuts import render
+from user.views import LogoutMsgView, LogoutView, RegistrationForm
+
+def home(request):
+    return render(request,'home.html')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('category/',include('category/urls.py')),    
-    path('post/',include('post/urls.py')),
-    path('user/',include('category/user.py')),
+    path('',include('django.contrib.auth.urls')),
+
+    path('',home),
+
+    path('category/',include('category.urls')),    
+    path('post/',include('post.urls')),
+    path('user/',include('user.urls')),
+
+    path('register',RegistrationForm.as_view(),name='register'),
+    path('logout', LogoutView.as_view(),name='logout'),
+    path('logout_msg', LogoutMsgView.as_view(),name='logout_msg'),   
+
 ]

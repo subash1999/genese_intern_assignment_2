@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+<div class="row h-100">
+    <div class="col-sm-12 my-auto">
+        <div class="card col-xl-5 col-md-7 col-xs-9 col-9 mx-auto p-3 mt-3">
+            <img src="{% static 'register.png' %}" alt="Favicon" class="w-50 h-25 image-rounded mx-auto">
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <h6>Already User ? <a href="{% url 'login' %}">Login here</a></h6>
+                <input type="submit" value="Sign up" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+
+{% endblock %}

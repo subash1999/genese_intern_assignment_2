@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<div class="row h-100">
+    <div class="col-sm-12 my-auto">
+        <div class="card col-xl-4 col-md-6 col-xs-8 col-8 mx-auto p-3 mt-3">
+            <img src="{% static 'login.png' %}" alt="Favicon" class="w-50 h-25 image-rounded mx-auto">
+            <h5 class="text-center text-info">Login</h5>
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <h6>Forgot Password? <a href="{% url 'password_reset' %}">Click here to reset</a></h6>
+                <h6>Not a user ? <a href="{% url 'login' %}">Sign up here</a></h6>
+                <input type="submit" value="Login" class="float-right btn btn-success">
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

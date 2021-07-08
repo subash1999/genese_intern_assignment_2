@@ -1,0 +1,8 @@
+{% extends 'user/user_dashboard_base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}{{ request.user.username }} : My Profile{% endblock %}
+
+{% block content %}
+    {% include 'snippets/profile.html' with user=request.user update_url='/update' %}
+{% endblock %}

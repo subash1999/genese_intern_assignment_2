@@ -1,5 +1,6 @@
 /genese_intern_assignment_2/
 /.vscode/
+/static/vendor/fontawesome-free-5.15.3-web/
 
 # Created by https://www.toptal.com/developers/gitignore/api/django
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
