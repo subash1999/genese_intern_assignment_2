@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-2">
+    <h2 class="text-center"><u>Post List</u></h2>
+    <hr>
+    <div class="float-right">
+        <a href="{% url 'post:create' %}" class="btn btn-lg btn-success float-right">Add Post</a>
+    </div>
+    <hr>
+    {% if page_obj.paginator.count <= 0 %}
+    <h3 class="text-center">No Posts to show</h3>
+    {% else %}
+    <div class="d-flex justify-content-end">
+        {% include 'snippets/paginator_links.html' with page_obj=page_obj request=request only%}
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead class="bg-secondary text-light">
+            <th>S.N</th>
+            <th>ID</th>
+            <th>Post Title</th>
+            <th>Body</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Detail View</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </thead>
+        <tbody>
+            {% for post in page_obj %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ post.id }}</td>
+                <td class="">{{ post.title }}</td>
+                <td class="text-truncate text-secondary fw-light" style="max-width:200px;display:inline-block;">
+                    {{ post.body }}</td>
+                <td>{{ post.user.username }}</td>
+                <td><a href="{{ post.category.get_absolute_url }}">{{ post.category.name }}</a></td>
+                <td><a href="{% url 'post:detail' post.slug %}" class="btn btn-sm btn-info">Details</a></td>
+                <td>
+                    {% if request.user == post.user %}
+                    <a href="{% url 'post:update' post.slug %}" class="btn btn-sm btn-secondary">Update</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if request.user == post.user %}
+                    <form action="{% url 'post:delete' post.slug %}" method="post"
+                        onsubmit="return confirm('Do you want to delete post with title : \'{{ post.title }}\' ?')">
+                        {% csrf_token %}
+                        <input type="submit" value="Delete" class="btn btn-sm btn-danger">
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-end">
+        {% include 'snippets/paginator_links.html' with page_obj=page_obj request=request only%}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock content %}

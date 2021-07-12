@@ -18,9 +18,11 @@ from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render
 from user.views import LogoutMsgView, LogoutView, RegistrationForm
+from django.conf import settings
+from django.conf.urls.static import static
+from .views import home
 
-def home(request):
-    return render(request,'home.html')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,4 +38,5 @@ urlpatterns = [
     path('logout', LogoutView.as_view(),name='logout'),
     path('logout_msg', LogoutMsgView.as_view(),name='logout_msg'),   
 
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

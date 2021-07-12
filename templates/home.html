@@ -1,4 +1,23 @@
 {% extends 'base.html' %}
 {% block title %}Post : Home{% endblock %}
-{% block container %}
+{% block content %}
+<h1 class="text-center">Welcome !! </h1>
+<br>
+{% if request.user.is_authenticated %}
+<h4>Creating a post and sharing your knowledge is the best thing to do.</h4>
+<a href="{% url 'post:create' %}" class="btn btn-lg btn-success">Create Post</a>
+{% else %}
+<h2>Register to create your own post. <a href="{% url 'register' %}">Register Now</a></h2>
+{% endif %}
+<hr>
+<h3>Latest Posts</h3>
+{% for post in posts %}
+<br>
+{% if request.user.is_authenticated %}
+{% include 'snippets/card_showing_post.html' with post=post request=request only%}
+{% else %}
+{% include 'snippets/post_hidden_for_guest.html' with post=post request=request only%}
+{% endif %}
+<br>
+{% endfor %}
 {% endblock %}

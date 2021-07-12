@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-center">Category : {{ category.name }}</h1>
+<h6 class="text-center">No of Posts : {{ category.posts_count }}</h6>
+<br>
+<table class="mx-auto">
+    <tbody>
+        <tr>
+            <td>
+                <a href="{% url 'category:list' %}" class="btn btn-primary btn-sm">All Category</a>
+            </td>
+            {% if request.user.is_superadmin %}
+            <td>
+                <a href="{% url 'category:update' category.slug %}" class="btn btn-secondary btn-sm">Update Category</a>
+            </td>
+
+            <td>
+                <form action="{% url 'category:delete' category.slug %}" method="post"
+                    onsubmit="return confirm('Do you want to delete category with name : \'{{ category.name }}\' ?')">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete Category" class="btn btn-danger btn-sm">
+                </form>
+            </td>
+            {% endif %}
+        </tr>
+    </tbody>
+</table>
+<hr>
+<table>
+<h4>Category Description</h4>
+<p>{{ category.description }}</p>
+<hr>
+<h2>Posts of Category: {{ category.name }}</h2>
+{% for post in category.post_set.all %}
+<hr>
+{% include 'snippets/card_showing_post.html' with post=post counter=forloop.counter %}
+{% endfor %}
+
+
+    {% endblock %}

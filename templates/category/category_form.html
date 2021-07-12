@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h2 class="text-center">{% if category %}Update{% else %}Create{% endif %} Category Form {% if category %} : {% endif %}
+    {{ category.name }}</h2>
+
+{% if category %}
+<table class="mx-auto">
+    <tbody>
+        <tr>
+            <td>
+                <a href="{% url 'category:list' %}" class="btn btn-primary">All Categories</a>
+            </td>
+            <td>
+                <a href="{% url 'category:detail' category.slug %}" class="btn btn-info">Details</a>
+            </td>
+            <td>
+                <form action="{% url 'category:delete' category.slug %}" method="post"
+                    onsubmit="return confirm('Do you want to delete category with name : \'{{ category.name }}\' ?')">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete" class="btn btn-danger">
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{% endif %}
+
+{% if form.subject.errors %}
+<ol>
+    {% for error in form.subject.errors %}
+    <li><strong>{{ error|escape }}</strong></li>
+    {% endfor %}
+</ol>
+{% endif %}
+
+
+<form method="POST" enctype="multipart/form-data" class="card col-xl-8 col-md-10 col-xs-9 col-9 mx-auto p-3 mt-3">
+
+    <!-- Security token -->
+    {% csrf_token %}
+
+    <!-- Using the formset -->
+    {{ form|crispy }}
+
+    {% if category %}
+    <input type="submit" value="Update Category" class="btn btn-info">
+    {% else %}
+    <input type="submit" value="Create Category" class="btn btn-success">
+    {% endif %}
+
+
+</form>
+{% endblock content %}

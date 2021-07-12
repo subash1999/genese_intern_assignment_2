@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-2">
+    <h2 class="text-center"><u>Search Results Posts</u></h2>
+
+    <div>
+        <div class="float-start">
+            {% if query %}
+            <h5>Search By Title : {{ query }}</h5>
+            <h5>Results Found : {{ count }}</h5>
+            {% endif %}
+        </div>
+        <span class="float-end">
+            Post does not exists? <a href="{% url 'post:create' %}" class="btn btn-sm btn-success">Add Post</a>
+        </span>
+    </div>
+    <br>
+    <br>
+    <br>
+    <hr>
+    <div class="d-flex justify-content-end">        
+    {% include 'snippets/paginator_links.html' with page_obj=page_obj request=request only%}
+    </div>
+    {% if page_obj.paginator.count <= 0 %}
+    <h3 class="text-center">No Posts to show</h3>
+    {% else %}
+    {% for post in page_obj %}
+    <br>
+    {% include 'snippets/card_showing_post.html' with post=post request=request counter=forloop.counter0|add:page_obj.start_index only%}
+    <br>
+    {% endfor %}
+    <div class="d-flex justify-content-end">
+    {% include 'snippets/paginator_links.html' with page_obj=page_obj request=request only%}
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}

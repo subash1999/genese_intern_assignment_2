@@ -1,0 +1,38 @@
+<div class="card p-3">
+    <h5>{% if counter %}{{ counter }}. {% endif %}{{ post.title }}
+        <small>
+            <div class="float-end">
+                <div class="mb-1">
+                    <a href="{% url 'post:detail' post.slug %}" class="btn btn-sm btn-info">Detail View</a>
+                    {%if post.user == request.user %}
+                    <a href="{% url 'post:update' post.slug %}" class="btn btn-secondary btn-sm mr-2">Update Post</a>
+                </div>
+                <form action="{% url 'post:delete' post.slug %}" method="post" class="mr-2"
+                    onsubmit="return confirm('Do you want to delete post with title : \'{{ post.title }}\' ?')">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete Post" class="btn btn-danger btn-sm">
+                </form>
+                {% endif %}
+            </div>
+        </small>
+    </h5>
+    <div class="row">
+        <p class="text-truncate">{{ post.body }}</p>
+    </div>
+    <br>
+    <small>
+        {% if post.user %}
+        <div class="float-end">
+            <span class="badge rounded-pill bg-success text-break">Author: {{ post.user.username }}</span>
+        </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-12">
+                <span class="badge rounded-pill bg-secondary text-break">Created at: {{ post.created_at }}</span>
+            </div>
+            <div class="col-12">
+                <span class="badge rounded-pill bg-primary text-break">Last Updated at: {{ post.updated_at }}</span>
+            </div>
+        </div>
+    </small>
+</div>

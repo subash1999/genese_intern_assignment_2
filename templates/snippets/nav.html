@@ -1,3 +1,5 @@
+{% load user_custom_tags %}
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">Home</a>
@@ -8,25 +10,38 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Posts</a>
+          <a class="nav-link active" aria-current="page" href="{% url 'post:list' %}">Posts</a>
         </li>
+        {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'post:create' %}">Create Post</a>
+        </li>
+        {% endif %}
         <li class="nav-item dropdown">
           <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button"
             data-bs-toggle="dropdown" aria-expanded="false">
             Post Categories
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#"></a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
+            {% for pc in top_categories %}
+            <li><a class="dropdown-item" href="{{ pc.get_absolute_url }}">{{ pc.name }}</a></li>
+            {% endfor %}
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li><a class="dropdown-item" href="{% url 'category:list' %}">All Post Categories</a></li>
           </ul>
+          {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser %}
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'category:create' %}">Create Post Category</a>
+            </li>
+            {% endif %}
+          {% endif %}
         </li>
       </ul>
-      <form class="d-flex justify-content-center">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+      <form class="d-flex justify-content-center" action="{% url 'post:search' %}">
+        <input class="form-control me-2" type="search" placeholder="Search posts by title" aria-label="Search" name="q">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
       {% if request.user.is_authenticated %}
@@ -34,10 +49,10 @@
         <li class="nav-item dropdown">
           <a class="nav-link active dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
-            {{ request.user.username }}
+            {{ request.user|original_username }}
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-            <li><a class="dropdown-item" href="#"></a></li>
+            <li><a class="dropdown-item" href="{% url 'user:posts' %}">My Posts</a></li>
             <li><a class="dropdown-item" href="{% url 'user:profile' %}">My Profile</a></li>
             <li>
               <hr class="dropdown-divider">

@@ -1,63 +1,81 @@
 <!doctype html>
 {% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}Post{% endblock %}</title>
-    <link rel="shortcut icon" type="image/jpg" href="{% static 'favicon.ico' %}"/>
+    <link rel="shortcut icon" type="image/jpg" href="{% static 'favicon.ico' %}" />
 
     <link rel="stylesheet" href="{% static 'vendor/bootstrap-5.0.2.min.css' %}">
     <link rel="stylesheet" href="{% static 'vendor/datatables.min.css' %}">
     <link rel="stylesheet" href="{% static 'vendor/fontawesome-free-5.15.3-web/css/all.min.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="{% static 'vendor/vue-3.1.2.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap-5.0.2.min.js' %}"></script>
+    <script src="{% static 'vendor/datatables.min.js' %}"></script>
+    <script src="{% static 'vendor/fontawesome-free-5.15.3-web/js/all.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
+        integrity="sha512-RXf+QSDCUQs5uwRKaDoXt55jygZZm2V++WUZduaU/Ui/9EGp3f/2KZVahFZBKGH0s774sd3HmrhUy+SgOFQLVQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        <!--csrf token        -->
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
+    <script>
+        <!--datatables       -->
+        jQuery(function ($) {
+            $('.datatable').DataTable({
+                "scrollY": "300px",
+                "scrollX": true,
+                "scrollCollapse": false,
+                stateSave: true,
+                dom: 'Blfrtip',
+                buttons: [],
+                "lengthMenu": [
+                    [10,
+                        25,
+                        50,
+                        -1
+                    ],
+                    [10,
+                        25,
+                        50,
+                        "All"
+                    ]
+                ],
+                fixedColumns: {
+                    leftColumns: 3,
+                    //
+                    rightColumns: 1
+                },
+            }).columns.adjust();
+        });
+    </script>
+
 
 </head>
+
 <body>
     {% include 'snippets/nav.html '%}
-<div class="container">
-    
-{% block content %}
+    <div class="container" id="app">
 
-{% endblock %}
-</div>
+        {% block content %}
+
+        {% endblock %}
+    </div>
 </body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<script src="{% static 'vendor/vue-3.1.2.js' %}"></script>
-<script src="{% static 'vendor/bootstrap-5.0.2.min.js' %}"></script>
-<script src="{% static 'vendor/datatables.min.js' %}"></script>
-<script src="{% static 'vendor/fontawesome-free-5.15.3-web/js/all.min.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" integrity="sha512-RXf+QSDCUQs5uwRKaDoXt55jygZZm2V++WUZduaU/Ui/9EGp3f/2KZVahFZBKGH0s774sd3HmrhUy+SgOFQLVQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script>
-    <!-- csrf token -->
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-</script>
-<script>
-    <!-- datatables -->
-    jQuery(function ($) {
-        $('.datatable').DataTable({
-            "scrollY": "300px",
-            "scrollX": true,
-            "scrollCollapse": false,
-            stateSave: true,
-
-            dom: 'Blfrtip',
-            buttons: [
-            ],
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            fixedColumns: {
-                leftColumns: 3,
-                //     rightColumns: 1
-            },
-        }).columns.adjust();
-    });
-</script>
 
 </html>

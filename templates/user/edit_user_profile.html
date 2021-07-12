@@ -4,5 +4,5 @@
 {% block title %}{{ request.user.username }} : My Profile{% endblock %}
 
 {% block content %}
-    {% include 'snippets/edit_profile.html' with user=request.user form_url='/update' %}
+    {% include 'snippets/edit_profile.html' with user=request.user save_url_name='user:update_profile' cancel_url_name='user:profile' %}
 {% endblock %}

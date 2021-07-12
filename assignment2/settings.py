@@ -73,6 +73,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'category.custom_context_processor.category_renderer',
+                
             ],
         },
     },
@@ -161,3 +163,5 @@ LOGOUT_REDIRECT_URL = 'user/logout_msg'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')

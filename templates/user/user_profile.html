@@ -4,5 +4,5 @@
 {% block title %}{{ request.user.username }} : My Profile{% endblock %}
 
 {% block content %}
-    {% include 'snippets/profile.html' with user=request.user update_url='/update' %}
+    {% include 'snippets/profile.html' with user=request.user update_url_name='user:update_profile' %}
 {% endblock %}

@@ -14,7 +14,7 @@
                 {% csrf_token %}
                 {{ form|crispy }}
                 <h6>Forgot Password? <a href="{% url 'password_reset' %}">Click here to reset</a></h6>
-                <h6>Not a user ? <a href="{% url 'login' %}">Sign up here</a></h6>
+                <h6>Not a user ? <a href="{% url 'register' %}">Sign up here</a></h6>
                 <input type="submit" value="Login" class="float-right btn btn-success">
             </form>
         </div>

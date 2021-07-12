@@ -1,6 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from user.models import UserProfile
+from django.forms import ModelForm
+import re
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -8,18 +11,27 @@ class CustomUserCreationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super(CustomUserCreationForm, self).__init__(*args, **kwargs)
-        help = self.fields['password1'].help_text
-        help = help.split("</ul>")[0]+"<li>Your password must contain atleast 1 uppercase character.</li></ul>"
-        self.fields['password1'].help_text = help
+        for f in self.fields.keys():
+            self.fields[f].help_text = ""
 
     class Meta:
         model = User
-        fields = ("username", "email", "password1", "password2")
+        fields = ("email", "password1", "password2")
     
     def clean_password1(self):
         password = self.cleaned_data['password1']
+        flag = True
+
         if password.islower():
-            raise forms.ValidationError("Password must contain atleast one upper case character.")
+            Flag = False
+        elif '@' not in password and '-' not in password and '|' not in password:
+            Flag = False
+        elif not re.search("[a-z]", password) and not  re.search("[A-Z]", password):
+            Flag = False
+            
+        if not Flag:
+            raise forms.ValidationError("Password must have atleast one alphabet, special character and upper case character.")
+
         return password
 
     def save(self, commit=True):
@@ -28,3 +40,24 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+class UserProfileForm(ModelForm):
+    
+    class Meta:
+        model = UserProfile
+        fields = ['dob','phone','address','image']
+
+        
+class UserUpdateForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        # first call parent's constructor
+        super(UserUpdateForm, self).__init__(*args, **kwargs)
+        # there's a `fields` property now
+        self.fields['email'].required = True
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+        
+    class Meta:
+        model = User
+        fields = ['username','email','first_name','last_name']
+
