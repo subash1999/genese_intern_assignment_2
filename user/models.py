@@ -24,6 +24,9 @@ class UserProfile(models.Model):
 
     def save(self,  *args, **kwargs):
         if not (self.image == self.__original_image):
-            self.__original_image.delete(save=False)
-            self.image.name = str(uuid.uuid4())+self.image.name
+            try:
+                self.__original_image.delete(save=False)
+                self.image.name = str(uuid.uuid4())+self.image.name
+            except:
+                pass
         super(UserProfile,self).save(*args, **kwargs)
