@@ -2,7 +2,7 @@
     <h5>{% if counter %}{{ counter }}. {% endif %}{{ post.title }}
     </h5>
     <div class="row">
-        <p class="text-truncate text-warning bg-dark"><b>Content Hidden for guests. Please Login to continue.</b></p>
+        <p class="text-truncate text-warning bg-dark"><b>Content Hidden for guests. Please <a href="{% url 'login' %}">Login to continue.</a></b></p>
     </div>
     <br>
     <small>
