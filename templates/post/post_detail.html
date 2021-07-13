@@ -19,7 +19,7 @@
             <td>
                 <a href="{% url 'post:list' %}" class="btn btn-primary btn-sm">All Posts</a>
             </td>
-            {% if request.user == post.user %}
+            {% if request.user == post.user or request.user.is_superuser %}
             <td>
                 <a href="{% url 'post:update' post.slug %}" class="btn btn-secondary btn-sm">Update Post</a>
             </td>

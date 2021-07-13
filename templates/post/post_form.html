@@ -9,12 +9,12 @@
     <tbody>
         <tr>
             <td>
-                <a href="{% url 'post:list' %}" class="btn btn-primary">All Categories</a>
+                <a href="{% url 'post:list' %}" class="btn btn-primary">All Post</a>
             </td>
             <td>
                 <a href="{% url 'post:detail' post.slug %}" class="btn btn-info">Details</a>
             </td>
-            {% if request.user == post.user %}
+            {% if request.user == post.user or request.user.is_superuser %}
             <td>
                 <form action="{% url 'post:delete' post.slug %}" method="post"
                     onsubmit="return confirm('Do you want to delete post with id : \'{{ post.title }}\' ?')">

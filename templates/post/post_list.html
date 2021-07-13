@@ -37,12 +37,12 @@
                 <td><a href="{{ post.category.get_absolute_url }}">{{ post.category.name }}</a></td>
                 <td><a href="{% url 'post:detail' post.slug %}" class="btn btn-sm btn-info">Details</a></td>
                 <td>
-                    {% if request.user == post.user %}
+                    {% if request.user == post.user or request.user.is_superuser %}
                     <a href="{% url 'post:update' post.slug %}" class="btn btn-sm btn-secondary">Update</a>
                     {% endif %}
                 </td>
                 <td>
-                    {% if request.user == post.user %}
+                    {% if request.user == post.user or request.user.is_superuser %}
                     <form action="{% url 'post:delete' post.slug %}" method="post"
                         onsubmit="return confirm('Do you want to delete post with title : \'{{ post.title }}\' ?')">
                         {% csrf_token %}

@@ -4,7 +4,7 @@
             <div class="float-end">
                 <div class="mb-1">
                     <a href="{% url 'post:detail' post.slug %}" class="btn btn-sm btn-info">Detail View</a>
-                    {%if post.user == request.user %}
+                    {% if request.user == post.user or request.user.is_superuser %}
                     <a href="{% url 'post:update' post.slug %}" class="btn btn-secondary btn-sm mr-2">Update Post</a>
                 </div>
                 <form action="{% url 'post:delete' post.slug %}" method="post" class="mr-2"
