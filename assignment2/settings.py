@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django_session_timeout.middleware.SessionTimeoutMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -126,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kathmandu'
 
 USE_I18N = True
 
@@ -171,3 +172,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
+
+SESSION_EXPIRE_SECONDS = 1800
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY_GRACE_PERIOD = 300
+SESSION_TIMEOUT_REDIRECT = '/user/session_expired'

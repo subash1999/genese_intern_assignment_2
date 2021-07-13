@@ -1,6 +1,6 @@
 from user.models import UserProfile
 from django.urls import path
-from user.views import LogoutMsgView, LogoutView, RegistrationForm, UpdateUserProfileView, UserMyPostView, UserProfileView
+from user.views import LogoutMsgView, LogoutView, RegistrationForm, UpdateUserProfileView, UserMyPostView, UserProfileView, SessionExpireView
 
 
 app_name = 'user'
@@ -13,6 +13,8 @@ urlpatterns = [
 
     path('register',RegistrationForm.as_view(),name='register'),
     path('logout', LogoutView.as_view(),name='logout'),
-    path('logout_msg', LogoutMsgView.as_view(),name='logout_msg'),   
+    path('logout_msg', LogoutMsgView.as_view(),name='logout_msg'), 
+    path('session_expired', SessionExpireView.as_view(),name='session_expired'),   
+
 
 ]

@@ -124,3 +124,6 @@ class LogoutView(generic.RedirectView):
 
 class LogoutMsgView(generic.base.TemplateView):
     template_name = "user/logout_msg.html"
+
+class SessionExpireView(generic.base.TemplateView):
+    template_name = "user/session_expire.html"

@@ -9,6 +9,5 @@ urlpatterns = [
     path('<slug:slug>/update', PostUpdateView.as_view(), name="update"),
     path('<slug:slug>/detail', PostDetailView.as_view(), name="detail"),
     path('<slug:slug>/delete', PostDeleteView.as_view(), name="delete"),
-
     path('search', PostSearchView.as_view(), name="search"),
 ]

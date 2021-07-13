@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Session Expires{% endblock %}
+
+{% block content %}
+
+<div class="row h-100">
+    <div class="col-sm-12 my-auto">
+        <div class="card col-xl-8 col-md-10 col-xs-11 col-11 mx-auto p-3 mt-3">
+            <h4>Your current session is expired. To continue please <a href="{% url 'login' %}">login here.</a></h4>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
