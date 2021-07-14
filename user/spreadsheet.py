@@ -11,8 +11,9 @@ class Spreadsheet:
     
     # The ID and range of a sample spreadsheet.
     SPREADSHEET_ID = '1zbszu3Ar5XOzZQ5UP_0nFzMaum9cbQmVLjm4IwPs2cY'
-    WRITE_RANGE = 'user_posts!A1'
-    READ_RANGE = 'user_posts!A1:H'
+    WRITE_RANGE = 'user_posts'
+    READ_RANGE = 'user_posts'
+    SHEET_NAME = 'user_posts'
 
     def __init__(self):
         self.sheet = self.get_sheet()
@@ -50,6 +51,12 @@ class Spreadsheet:
         Returns:
             list: [description]
         """
+        #clear the sheet before wiriting the new data        
+        self.clear()
+
         request = self.sheet.values().update(spreadsheetId=self.SPREADSHEET_ID,
                                 range=self.WRITE_RANGE, valueInputOption="USER_ENTERED", body={"values":values_to_write})
         return request.execute()
+    
+    def clear(self) -> list:
+        return self.sheet.values().clear(spreadsheetId=self.SPREADSHEET_ID, range=self.SHEET_NAME).execute()

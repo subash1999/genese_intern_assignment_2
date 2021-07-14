@@ -141,32 +141,8 @@ class ExportUserAndPostView( UserPassesTestMixin,generic.base.View):
         return self.request.user.is_superuser
 
     def post(self,request):
-        users = User.objects.annotate(post_count=Count('post')).filter(post_count__gt=0).order_by("-first_name","-last_name")
-        row_list = [
-            ["S.N","User ID","First Name","Last Name", "Email", "Address", "Phone", "Posts"]
-        ]
-        for i,user in enumerate(users,start=1):
-            row = []
-            row += [i,user.id,user.first_name,user.last_name,user.email]
-            
-            if hasattr(user,'userprofile'):
-                if not user.userprofile.address == "None":
-                    row += [user.userprofile.address]
-                else:
-                    row += [""]
-                if not user.userprofile.phone == "None":
-                    row += [user.userprofile.phone]
-                else:
-                    row += [""]
-            else:
-                row += ["",""]
-            
-            post_title = []
-            for i,post in enumerate(user.post_set.all(),start=1):
-                post_title.append(str(i)+") "+post.title)
-            row.append(" ,".join(post_title))
-
-            row_list.append(row)
+        row_list = self.sheet_data_by_user() # export to sheet by grouping posts according to the user
+        # row_list = self.sheet_data_by_post() #export to sheet as individual post
 
         sheet = Spreadsheet();
         sheet.write(row_list)
@@ -179,4 +155,30 @@ class ExportUserAndPostView( UserPassesTestMixin,generic.base.View):
 
     def get(self,request):
         return render(request, self.template_name)
+    
+    def sheet_data_by_post(self):
+        posts = Post.objects.order_by("-user__first_name","-user__last_name")
+        row_list = [
+            ["First Name","Last Name", "Email", "Address", "Phone", "Post"]
+        ]
+        row_list += posts.exclude(user__isnull=True).values_list("user__first_name","user__last_name","user__email","user__userprofile__address","user__userprofile__phone","title")
+        return row_list
+    
+    def sheet_data_by_user(self):
+        users = User.objects.annotate(post_count=Count('post')).filter(post_count__gt=0).order_by("-first_name","-last_name")
+        row_list = [
+            ["First Name","Last Name", "Email", "Address", "Phone", "Posts"]
+        ]
+        row_list += users.values_list("first_name","last_name","email","userprofile__address","userprofile__phone")
 
+        for i in range(0,users.count()): 
+            user = users[i]
+            post_title = []
+
+            for j,post in enumerate(user.post_set.all(),start=1):
+                post_title.append(str(j)+") "+post.title)
+
+            row_list[i+1] = list(row_list[i+1])
+            row_list[i+1].append(" \n".join(post_title))
+
+        return row_list
