@@ -1,0 +1,13 @@
+{% extends 'user/user_dashboard_base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Export{% endblock %}
+
+{% block content %}
+   <form method="post">
+       {% csrf_token %}
+       <h3>Export User and Post Information to Google Sheet with ID: 1zbszu3Ar5XOzZQ5UP_0nFzMaum9cbQmVLjm4IwPs2cY</h3>
+       <h5><a target="_blank" href="https://docs.google.com/spreadsheets/d/1zbszu3Ar5XOzZQ5UP_0nFzMaum9cbQmVLjm4IwPs2cY/edit#gid=0">Google Sheet Link</a></h5>
+       <input type="submit" value="Export" class="btn btn-lg btn-success">
+   </form>
+{% endblock %}

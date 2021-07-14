@@ -3,6 +3,7 @@ from django.db.models.aggregates import Count
 from django.forms import widgets
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
+from django.views.generic.base import View
 from post.models import Post
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
@@ -97,3 +98,6 @@ def test_post_update_delete_permission(slug, request):
         if(post.user is not None):
             permission = (post.user.id == request.user.id)
     return request.user.is_superuser or permission
+
+
+

@@ -1,6 +1,6 @@
 from user.models import UserProfile
 from django.urls import path
-from user.views import LogoutMsgView, LogoutView, RegistrationForm, UpdateUserProfileView, UserMyPostView, UserProfileView, SessionExpireView
+from user.views import ExportUserAndPostView, LogoutMsgView, LogoutView, RegistrationForm, UpdateUserProfileView, UserMyPostView, UserProfileView, SessionExpireView
 
 
 app_name = 'user'
@@ -8,6 +8,8 @@ app_name = 'user'
 urlpatterns = [
     path('profile', UserProfileView.as_view(), name="profile"),
     path('update_profile', UpdateUserProfileView.as_view(), name="update_profile"),
+
+    path('export', ExportUserAndPostView.as_view(), name="export"),
 
     path('my_posts', UserMyPostView.as_view(), name="posts"),
 

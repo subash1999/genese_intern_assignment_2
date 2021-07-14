@@ -18,22 +18,16 @@ class CustomUserCreationForm(UserCreationForm):
         model = User
         fields = ("username","email", "password1", "password2")
     
-    # def clean_password2(self,*args, **kwargs):
-    #     super(CustomUserCreationForm,self).clean_password2(*args, **kwargs)
-    #     password = self.cleaned_data['password2']
-    #     Flag = True
+    def clean_password2(self,*args, **kwargs):
+        super(CustomUserCreationForm,self).clean_password2(*args, **kwargs)
+        password = self.cleaned_data['password2']
 
-    #     if password.islower():
-    #         Flag = False
-    #     elif '@' not in password and '-' not in password and '|' not in password:
-    #         Flag = False
-    #     elif not re.search("[a-z]", password) and not  re.search("[A-Z]", password):
-    #         Flag = False
-            
-    #     if not Flag:
-    #         raise forms.ValidationError("Password must have atleast one alphabet, special character and upper case character.")
+        if password.islower() or \
+            (not re.findall('[()[\]{}|\\`~!@#$%^&*_\-+=;:\'",<>./?]', password)) or \
+              (not re.search("[a-z]", password) and not  re.search("[A-Z]", password))  :
+            raise forms.ValidationError("Password must have at least 8 characters among which one alphabet, special character and upper case character is required.")
 
-        # return password
+        return password
 
     def save(self, commit=True):
         user = super(CustomUserCreationForm, self).save(commit=False)

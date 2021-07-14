@@ -52,6 +52,9 @@
             {{ request.user|original_username }}
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            {% if request.user.is_superuser %}
+            <li><a class="dropdown-item" href="{% url 'user:export' %}">Export User and Post</a></li>
+            {% endif %}
             <li><a class="dropdown-item" href="{% url 'user:posts' %}">My Posts</a></li>
             <li><a class="dropdown-item" href="{% url 'user:profile' %}">My Profile</a></li>
             <li>

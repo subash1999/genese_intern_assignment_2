@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Logout Message{% endblock %}
+
+{% block content %}
+
+<div class="row h-100 text-success">
+    <div class="col-sm-12 my-auto">
+        <div class="card col-xl-8 col-md-10 col-xs-11 col-11 mx-auto p-3 mt-3">
+            <h5 class="text-center">Data Exported Successfully</h5>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<h3>Exported Data</h3>
+<hr>
+<table class="table table-bordered">
+    <thead>
+        {% for col in columns_name %}
+        <th>{{ col }}</th>
+        {% endfor %}
+    </thead>
+    <tbody>
+        
+        {% for row in  exported_data %}
+            <tr>
+                
+                {% for data in row %}
+                    <td>{{ data }}</td>
+                {% endfor %}
+                    
+            </tr>
+        {% endfor %}
+            
+    </tbody>
+</table>
+<hr>
+
+{% endblock %}

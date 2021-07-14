@@ -1,15 +1,18 @@
-from django.contrib.auth.forms import AuthenticationForm
-from django.http.request import QueryDict
+from django.contrib.auth.mixins import UserPassesTestMixin
+from user.spreadsheet import Spreadsheet
 from django.shortcuts import redirect, render
 from user.forms import CustomUserCreationForm, UserProfileForm,UserUpdateForm
 from django.views import generic
 from django.urls import reverse_lazy, reverse
-from django.contrib.auth import logout, login
+from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from post.models import Post
-import os
+import xlwt
+from django.http import HttpResponse
+from django.contrib.auth.models import User
+from django.db.models import Count
 
 # Create your views here.
 # Create your views here.
@@ -127,3 +130,53 @@ class LogoutMsgView(generic.base.TemplateView):
 
 class SessionExpireView(generic.base.TemplateView):
     template_name = "user/session_expire.html"
+
+@method_decorator(login_required,name='post')
+@method_decorator(login_required,name='get')
+@method_decorator(login_required,name='dispatch')
+class ExportUserAndPostView( UserPassesTestMixin,generic.base.View):
+    template_name = 'user/export_user_and_post_data.html'
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def post(self,request):
+        users = User.objects.annotate(post_count=Count('post')).filter(post_count__gt=0).order_by("-first_name","-last_name")
+        row_list = [
+            ["S.N","User ID","First Name","Last Name", "Email", "Address", "Phone", "Posts"]
+        ]
+        for i,user in enumerate(users,start=1):
+            row = []
+            row += [i,user.id,user.first_name,user.last_name,user.email]
+            
+            if hasattr(user,'userprofile'):
+                if not user.userprofile.address == "None":
+                    row += [user.userprofile.address]
+                else:
+                    row += [""]
+                if not user.userprofile.phone == "None":
+                    row += [user.userprofile.phone]
+                else:
+                    row += [""]
+            else:
+                row += ["",""]
+            
+            post_title = []
+            for i,post in enumerate(user.post_set.all(),start=1):
+                post_title.append(str(i)+") "+post.title)
+            row.append(" ,".join(post_title))
+
+            row_list.append(row)
+
+        sheet = Spreadsheet();
+        sheet.write(row_list)
+
+        result = sheet.read()
+        columns_name = result[0]
+        exported_data = result[1:]
+
+        return render(request, "user/data_exported_success.html",{"exported_data":exported_data,'columns_name':columns_name})
+
+    def get(self,request):
+        return render(request, self.template_name)
+
