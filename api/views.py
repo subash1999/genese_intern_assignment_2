@@ -15,3 +15,25 @@ class UserList(APIView):
 
     def post(self, request):
         pass
+
+
+# Create your views here.
+class UserDetail(APIView):
+    def get(self, request, pk=None):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        pass
+
+
+# Create your views here.
+class UserCreate(APIView):
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        pass
