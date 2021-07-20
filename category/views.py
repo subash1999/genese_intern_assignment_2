@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models.aggregates import Count
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
@@ -15,25 +15,18 @@ from category.models import Category
 
 
 # Create your views here.
-@method_decorator(login_required, name="dispatch")
-@method_decorator(login_required, name="get")
-class CategoryListView(ListView):
+class CategoryListView(LoginRequiredMixin, ListView):
     paginate_by = 5
     model = Category
     queryset = Category.objects.all().annotate(posts_count=Count("post"))
 
 
-@method_decorator(login_required, name="dispatch")
-@method_decorator(login_required, name="get")
-class CategoryDetailView(DetailView):
+class CategoryDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "category"
     queryset = queryset = Category.objects.all().annotate(posts_count=Count("post"))
 
 
-@method_decorator(login_required, name="dispatch")
-@method_decorator(login_required, name="post")
-@method_decorator(login_required, name="get")
-class CategoryCreateView(UserPassesTestMixin, CreateView):
+class CategoryCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     context_object_name = "category"
     model = Category
     fields = ["name", "description"]
@@ -45,10 +38,7 @@ class CategoryCreateView(UserPassesTestMixin, CreateView):
         return self.request.user.is_superuser
 
 
-@method_decorator(login_required, name="dispatch")
-@method_decorator(login_required, name="post")
-@method_decorator(login_required, name="get")
-class CategoryUpdateView(UserPassesTestMixin, UpdateView):
+class CategoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     context_object_name = "category"
     model = Category
     fields = ["name", "description"]
@@ -60,8 +50,7 @@ class CategoryUpdateView(UserPassesTestMixin, UpdateView):
         return self.request.user.is_superuser
 
 
-@method_decorator(login_required, name="dispatch")
-class CategoryDeleteView(UserPassesTestMixin, DeleteView):
+class CategoryDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Category
     success_url = reverse_lazy("category:list")
 

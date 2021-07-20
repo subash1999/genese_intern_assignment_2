@@ -19,14 +19,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.shortcuts import render
 from django.urls import path
+from post.views import home
 from user.views import LogoutMsgView, LogoutView, RegistrationForm
-
-from .views import home
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("django.contrib.auth.urls")),
-    path("", home),
     path("category/", include("category.urls")),
     path("post/", include("post.urls")),
     path("user/", include("user.urls")),
@@ -34,4 +32,5 @@ urlpatterns = [
     path("register", RegistrationForm.as_view(), name="register"),
     path("logout", LogoutView.as_view(), name="logout"),
     path("logout_msg", LogoutMsgView.as_view(), name="logout_msg"),
+    path("", home),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

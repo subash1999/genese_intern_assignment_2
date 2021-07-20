@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import UserPassesTestMixin
-from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import (
@@ -15,25 +15,18 @@ from post.models import Post
 
 
 # Create your views here.
-@method_decorator(login_required, name="dispatch")
-@method_decorator(login_required, name="get")
-class PostListView(ListView):
+class PostListView(LoginRequiredMixin, ListView):
     paginate_by = 5
     model = Post
     queryset = Post.objects.all().annotate()
 
 
-@method_decorator(login_required, name="dispatch")
-@method_decorator(login_required, name="get")
-class PostDetailView(DetailView):
+class PostDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "post"
     queryset = Post.objects.all()
 
 
-@method_decorator(login_required, name="dispatch")
-@method_decorator(login_required, name="post")
-@method_decorator(login_required, name="get")
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     context_object_name = "post"
     model = Post
     fields = [
@@ -46,10 +39,7 @@ class PostCreateView(CreateView):
         return reverse("post:detail", kwargs={"slug": self.object.slug})
 
 
-@method_decorator(login_required, name="dispatch")
-@method_decorator(login_required, name="post")
-@method_decorator(login_required, name="get")
-class PostUpdateView(UserPassesTestMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     context_object_name = "post"
     model = Post
     fields = [
@@ -65,8 +55,7 @@ class PostUpdateView(UserPassesTestMixin, UpdateView):
         return test_post_update_delete_permission(self.kwargs["slug"], self.request)
 
 
-@method_decorator(login_required, name="dispatch")
-class PostDeleteView(UserPassesTestMixin, DeleteView):
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     success_url = reverse_lazy("post:list")
 
@@ -103,3 +92,9 @@ def test_post_update_delete_permission(slug, request):
         if post.user is not None:
             permission = post.user.id == request.user.id
     return request.user.is_superuser or permission
+
+
+def home(request):
+    posts = Post.objects.order_by("-created_at")
+    no_of_posts = posts.count() if posts.count() < 10 else 10
+    return render(request, "home.html", {"posts": posts[:no_of_posts]})

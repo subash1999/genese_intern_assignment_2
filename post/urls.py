@@ -7,6 +7,7 @@ from .views import (
     PostListView,
     PostSearchView,
     PostUpdateView,
+    home,
 )
 
 app_name = "post"
@@ -18,4 +19,5 @@ urlpatterns = [
     path("<slug:slug>/detail", PostDetailView.as_view(), name="detail"),
     path("<slug:slug>/delete", PostDeleteView.as_view(), name="delete"),
     path("search", PostSearchView.as_view(), name="search"),
+    path("home", home),
 ]

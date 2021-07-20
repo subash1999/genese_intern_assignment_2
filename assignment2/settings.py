@@ -87,7 +87,7 @@ WSGI_APPLICATION = "assignment2.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django.db.backends.sqlite3",
         "NAME": "assignment_2",
         "USER": "postgres",
         "PASSWORD": "root",

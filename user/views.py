@@ -1,6 +1,6 @@
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.db.models import Count
 from django.shortcuts import redirect, render
@@ -23,17 +23,13 @@ class RegistrationForm(generic.CreateView):
         return reverse_lazy("login")
 
 
-@method_decorator(login_required, name="dispatch")
-class UserProfileView(generic.base.TemplateView):
+class UserProfileView(LoginRequiredMixin, generic.base.TemplateView):
     model = User
     context_object_name = "user"
     template_name = "user/user_profile.html"
 
 
-@method_decorator(login_required, name="post")
-@method_decorator(login_required, name="get")
-@method_decorator(login_required, name="dispatch")
-class UpdateUserProfileView(generic.base.View):
+class UpdateUserProfileView(LoginRequiredMixin, generic.base.View):
     template_name = "user/edit_user_profile.html"
     user_form = UserUpdateForm
     user_profile_form = UserProfileForm
@@ -87,8 +83,7 @@ class UpdateUserProfileView(generic.base.View):
         )
 
 
-@method_decorator(login_required, name="dispatch")
-class UserProfileView(generic.base.TemplateView):
+class UserProfileView(LoginRequiredMixin, generic.base.TemplateView):
     model = User
     context_object_name = "user"
     template_name = "user/user_profile.html"
@@ -98,8 +93,7 @@ class UserProfileView(generic.base.TemplateView):
         return context
 
 
-@method_decorator(login_required, name="dispatch")
-class UserMyPostView(generic.ListView):
+class UserMyPostView(LoginRequiredMixin, generic.ListView):
     template_name = "user/my_posts.html"
     model = Post
     paginate_by = 5
@@ -148,10 +142,7 @@ class SessionExpireView(generic.base.TemplateView):
     template_name = "user/session_expire.html"
 
 
-@method_decorator(login_required, name="post")
-@method_decorator(login_required, name="get")
-@method_decorator(login_required, name="dispatch")
-class ExportUserAndPostView(UserPassesTestMixin, generic.base.View):
+class ExportUserAndPostView(LoginRequiredMixin, UserPassesTestMixin, generic.base.View):
     template_name = "user/export_user_and_post_data.html"
 
     def test_func(self):

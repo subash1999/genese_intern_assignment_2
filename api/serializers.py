@@ -1,8 +1,8 @@
-from django.contrib.auth.models import User
+from post.models import Post
 from rest_framework import serializers
 
 
-class UserSerializer(serializers.ModelSerializer):
+class PostSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = "__all__"
+        model = Post
+        fields = ("id","title", "body")
