@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render
 from post.models import Post
-from rest_framework import status
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -31,9 +31,56 @@ class PostDetailAPIView(APIView):
         serializer = PostSerializer(post)
         return Response(serializer.data)
 
-    def post(self, request):
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, pk):
+        post = get_object_or_404(Post.objects.all(), pk=pk)
+        msg = "Post with id " + str(post.id) + " is deleted successfully."
+        post.delete()
+        return Response(
+            {"success": msg},
+            status=status.HTTP_204_NO_CONTENT,
+        )
+
+
+class PostCreateGenericView(generics.CreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class PostListGenericView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class PostRetrieveGenericView(generics.RetrieveAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class PostDestroyGenericView(generics.DestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class PostUpdateGenericView(generics.UpdateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class PostListCreateGenericView(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class PostRetrieveUpdateGenericView(generics.RetrieveUpdateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class PostRetrieveDestroyGenericView(generics.RetrieveDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class PostRetrieveUpdateDestroyGenericView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
