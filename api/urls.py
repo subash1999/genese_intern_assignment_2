@@ -1,4 +1,5 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 
 from api.views import (
     PostCreateGenericView,
@@ -7,6 +8,7 @@ from api.views import (
     PostListAPIView,
     PostListCreateGenericView,
     PostListGenericView,
+    PostModelViewSet,
     PostRetrieveDestroyGenericView,
     PostRetrieveGenericView,
     PostRetrieveUpdateDestroyGenericView,
@@ -15,13 +17,20 @@ from api.views import (
 )
 
 app_name = "api"
+
+# model view set
+router = DefaultRouter()
+router.register("model_view/post", PostModelViewSet, basename="post")
+
 urlpatterns = [
+    # api view
     path("api_view/post", PostListAPIView.as_view(), name="post-api"),
     path(
         "api_view/post/<int:pk>",
         PostDetailAPIView.as_view(),
         name="post-detail-api",
     ),
+    # generic view
     path(
         "generic_view/post/create",
         PostCreateGenericView.as_view(),
@@ -63,4 +72,4 @@ urlpatterns = [
         PostRetrieveUpdateDestroyGenericView.as_view(),
         name="post-retrieve-update-destroy-api",
     ),
-]
+] + router.urls
