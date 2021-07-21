@@ -1,10 +1,11 @@
-from assignment2.utils import unique_slug_generator
 from category.models import Category
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch.dispatcher import receiver
 from django.urls.base import reverse
+
+from .utils import unique_slug_generator
 
 
 # Create your models here.
